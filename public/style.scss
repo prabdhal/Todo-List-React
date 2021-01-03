@@ -1,0 +1,39 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --primaryColor: black;
+  --secondaryColor: #fe4e00;
+  --complementaryColor: rgb(44, 44, 44);
+  --largeFont: 5rem;
+  --mediumFont: 2rem;
+  --smallFont: 1.5rem;
+  --smallerFont: 1.2rem;
+  --regularFont: 1rem;
+  --btnPadding: 5px;
+  --smallverticalSpacing: 10px 0;
+  --mediumverticalSpacing: 20px 0;
+  --largeverticalSpacing: 30px 0;
+  --gutter: 20px;
+}
+
+.app {
+  height: 100vh;
+}
+
+footer {
+  min-height: 10vh;
+  padding: 20px 0 0 10px;
+  background-color: #eee;
+}
+
+.hide {
+  display: none;
+}
+
+@import "Navbar";
+@import "List";
+@import "Task";

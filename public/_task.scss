@@ -1,0 +1,35 @@
+main {
+  min-height: 80vh;
+  width: 80%;
+  margin: auto;
+  padding: 30px 0;
+}
+
+input {
+  padding: var(--btnPadding);
+}
+
+button {
+  padding: var(--btnPadding);
+}
+
+.count {
+  margin: 5px 0 0 0;
+  font-weight: bold;
+}
+
+.task-list {
+  padding: 20px 0;
+}
+
+.task-name {
+  margin-left: 10px;
+}
+
+.task:hover {
+  text-decoration: line-through;
+}
+
+.task-completed {
+  text-decoration: line-through;
+}

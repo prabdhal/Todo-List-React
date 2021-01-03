@@ -1,0 +1,16 @@
+.lists {
+  padding: 20px 0;
+}
+
+.list-name {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.list-name:hover {
+  opacity: 0.5;
+}
+
+.list-selected {
+  opacity: 0.5;
+}
