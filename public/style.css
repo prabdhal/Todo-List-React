@@ -162,14 +162,15 @@ footer {
   -ms-flex-line-pack: center;
       align-content: center;
   margin: auto;
+  font-size: var(--largeFont);
   padding: 20px;
-  background-color: var(--lightBlue);
+  background-color: #964b00;
 }
 
 nav {
   min-height: 10vh;
   padding: 20px 0 0 10px;
-  background-color: var(--lightBlue);
+  background-color: #964b00;
 }
 
 .nav-title {

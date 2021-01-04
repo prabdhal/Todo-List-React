@@ -144,8 +144,9 @@ footer {
   text-align: center;
   align-content: center;
   margin: auto;
+  font-size: var(--largeFont);
   padding: 20px;
-  background-color: var(--lightBlue);
+  background-color: rgb(150, 75, 0);
 }
 
 @import "Navbar";
