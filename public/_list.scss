@@ -18,6 +18,13 @@
   right: 90%;
 }
 
+.lists-header {
+  font-size: var(--largeFont);
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
 .todo-lists {
   max-height: 250px;
   overflow-y: auto;
@@ -25,7 +32,25 @@
 }
 
 .list {
+  width: 310px;
   margin: 3px 0;
+  background-color: var(--lightYellow);
+}
+
+.rename-container {
+  min-width: 350px;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.rename-input {
+  width: 260px;
+  padding: 2px;
+  border: 0;
+  outline: 0;
+  border-bottom: 2px solid var(--pink);
   background-color: var(--lightYellow);
 }
 

@@ -14,6 +14,33 @@ function App() {
   const listNameRef = useRef();
   const taskNameRef = useRef();
 
+  const newLists = [...lists];
+  const selectedList = newLists.find((list) => list.id === selectedListId);
+
+  // loads all todo and task data upon opening app
+  useEffect(() => {
+    const storedLists = JSON.parse(
+      localStorage.getItem(LOCAL_STORAGE_LIST_KEY)
+    );
+    const storedSelectedListId = localStorage.getItem(
+      LOCAL_STORAGE_SELECTED_LIST_ID_KEY
+    );
+    if (storedLists) setLists(storedLists);
+    if (storedSelectedListId) setSelectedListId(storedSelectedListId);
+  }, []);
+
+  // saves all todo data upon setting todos or tasks
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_LIST_KEY, JSON.stringify(lists));
+  }, [lists]);
+
+  // saves all todo data upon setting todos or tasks
+  useEffect(() => {
+    localStorage.setItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY, selectedListId);
+  }, [selectedListId]);
+
+  //-------------------- WINDOW WIDTH DEPENDENT FUNCTIONS --------------------//
+
   const getWidth = () =>
     window.innerWidth ||
     document.documentElement.clientWidth ||
@@ -47,6 +74,7 @@ function App() {
     return width;
   }
 
+  // Class Toggle Functions
   function toggleTodoDeleteBtn(useCurrentWidth) {
     let classes = "btn btn-danger ";
     if (useCurrentWidth <= 1300) {
@@ -61,78 +89,35 @@ function App() {
     } else return (classes += "hide");
   }
 
-  // loads all todo and task data upon opening app
-  useEffect(() => {
-    const storedLists = JSON.parse(
-      localStorage.getItem(LOCAL_STORAGE_LIST_KEY)
-    );
-    const storedSelectedListId = localStorage.getItem(
-      LOCAL_STORAGE_SELECTED_LIST_ID_KEY
-    );
-    if (storedLists) setLists(storedLists);
-    if (storedSelectedListId) setSelectedListId(storedSelectedListId);
-  }, []);
+  //-------------------- LIST FUNCTIONS --------------------//
 
-  // saves all todo data upon setting todos or tasks
-  useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_LIST_KEY, JSON.stringify(lists));
-    console.log("Updating lists");
-  }, [lists]);
-
-  // saves all todo data upon setting todos or tasks
-  useEffect(() => {
-    localStorage.setItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY, selectedListId);
-    setSelectedListId(selectedListId);
-    console.log("Updating selected lists " + selectedListId);
-  }, [selectedListId]);
-
+  // Initializes a list item
   function handleAddList(e) {
-    console.log("handle add list");
     const name = listNameRef.current.value;
+
+    closeRenameListContainers(newLists);
+
     if (name === "") return;
-    console.log("selected" + selectedListId);
+
     const id = uuidv4();
     setSelectedListId(id);
-    console.log(id);
-    console.log("selected" + selectedListId);
     setLists((prevLists) => {
-      return [...prevLists, { id: id, name: name, selected: false, tasks: [] }];
+      return [
+        ...prevLists,
+        { id: id, name: name, selected: false, tasks: [], rename: false },
+      ];
     });
     listNameRef.current.value = null;
-    console.log(id);
-    console.log("selected" + selectedListId);
   }
 
-  function handleAddTask(e) {
-    console.log("handle add list");
-    const name = taskNameRef.current.value;
-    if (name === "") return;
-    const selectedList = lists.find((list) => list.id === selectedListId);
-    selectedList.tasks.push({ id: uuidv4(), name: name, complete: false });
-    taskNameRef.current.value = null;
-
-    const newLists = [...lists];
-    setLists(newLists);
-  }
-
-  function closeAllLists(e) {
-    console.log("close all lists");
-    lists.map((list) => {
-      return (list.selected = false);
-    });
-    lists.map((list) => {
-      console.log(list.selected);
-    });
-
-    const newLists = [...lists];
-    setLists(newLists);
-    setSelectedListId(null);
-  }
-
-  async function toggleList(id) {
+  // Toggles list property of selected
+  function toggleList(id) {
     const selectedList = lists.find((list) => list.id === id);
     const newLists = [...lists];
 
+    closeRenameListContainers(newLists);
+    // otherList creation is important to ensure selected
+    // list works without reseting its selected property
     selectedList.selected = !selectedList.selected;
     const otherLists = newLists.filter((list) => list.id !== id);
 
@@ -140,16 +125,24 @@ function App() {
       return (list.selected = false);
     });
     setLists(newLists);
-    await setSelectedListId(id);
+    setSelectedListId(id);
   }
 
-  function toggleTaskWindowClass() {
-    let classes = "task-list-container ";
-    const count = lists.filter((list) => list.selected).length;
-    if (count <= 0) return (classes += "shift-tasks");
-    return classes;
+  // Gets all lists and sets their selected property to false
+  function closeAllLists(e) {
+    const newLists = [...lists];
+
+    closeRenameListContainers(newLists);
+
+    newLists.map((list) => {
+      return (list.selected = false);
+    });
+
+    setLists(newLists);
+    setSelectedListId(null);
   }
 
+  // Toggles shifting animation classes
   function toggleTodoListWindowClass() {
     let classes = "todo-lists-container ";
     const count = lists.filter((list) => list.selected).length;
@@ -157,28 +150,12 @@ function App() {
     return (classes += "shift-todo-lists");
   }
 
-  // finds the selected list and all its tasks via id in order
-  // to toggle a task to complete or incomplete
-  function toggleTask(id) {
-    const selectedList = lists.find((list) => list.id === selectedListId);
-    const selectedTask = selectedList.tasks.find((task) => task.id === id);
-
-    selectedTask.complete = !selectedTask.complete;
-    const newLists = [...lists];
-    setLists(newLists);
-  }
-
+  // Deletes selected list
   function handleDeleteLists() {
+    closeRenameListContainers(newLists);
     const newLists = lists.filter((list) => !list.selected);
     setLists(newLists);
-  }
-
-  function handleClearTasks() {
-    const selectedList = lists.find((list) => list.id === selectedListId);
-    const newTasks = selectedList.tasks.filter((task) => !task.complete);
-    selectedList.tasks = newTasks;
-    const newLists = [...lists];
-    setLists(newLists);
+    setSelectedListId(null);
   }
 
   function renderListsCount() {
@@ -187,6 +164,102 @@ function App() {
     if (count <= 0) return "no active todo lists!";
     else if (count === 1) return `${count} active todo list`;
     else return `${count} active todo lists`;
+  }
+
+  // Sets list property of rename to true
+  function renameList(id) {
+    const newLists = [...lists];
+
+    closeRenameListContainers(newLists);
+    const selectedList = lists.find((list) => list.id === id);
+    selectedList.rename = true;
+
+    setLists(newLists);
+    setSelectedListId(id);
+  }
+
+  // Sets list property of name to inputted value
+  function applyRenameList(id, name) {
+    const newLists = [...lists];
+
+    const selectedList = newLists.find((list) => list.id === id);
+    selectedList.rename = false;
+
+    if (name === "") return;
+    selectedList.name = name;
+
+    setLists(newLists);
+    setSelectedListId(id);
+  }
+
+  // Sets list property of rename to false
+  function cancelRenameList(id) {
+    const newLists = [...lists];
+
+    const selectedList = lists.find((list) => list.id === id);
+    selectedList.rename = false;
+
+    setLists(newLists);
+    setSelectedListId(id);
+  }
+
+  function closeRenameListContainers(lists) {
+    lists.map((list) => (list.rename = false));
+  }
+
+  //-------------------- TASK FUNCTIONS --------------------//
+
+  // Initializes a task item
+  function handleAddTask(e) {
+    const newLists = [...lists];
+
+    const name = taskNameRef.current.value;
+    if (name === "") return;
+    const selectedList = newLists.find((list) => list.id === selectedListId);
+    closeRenameTaskContainers(selectedList);
+    selectedList.tasks.push({
+      id: uuidv4(),
+      name: name,
+      complete: false,
+      rename: false,
+    });
+    taskNameRef.current.value = null;
+
+    setLists(newLists);
+  }
+
+  // toggles task property of complete
+  function toggleTask(id) {
+    const newLists = [...lists];
+
+    const selectedList = newLists.find((list) => list.id === selectedListId);
+    closeRenameTaskContainers(selectedList);
+
+    const selectedTask = selectedList.tasks.find((task) => task.id === id);
+    selectedTask.complete = !selectedTask.complete;
+
+    setLists(newLists);
+  }
+
+  // Toggles shifting animation classes
+  function toggleTaskWindowClass() {
+    let classes = "task-list-container ";
+    const count = lists.filter((list) => list.selected).length;
+    if (count <= 0) return (classes += "shift-tasks");
+    return classes;
+  }
+
+  // Clears all completed tasks
+  function handleClearTasks() {
+    const newLists = [...lists];
+
+    const selectedList = lists.find((list) => list.id === selectedListId);
+    closeRenameTaskContainers(selectedList);
+
+    const newTasks = selectedList.tasks.filter((task) => !task.complete);
+    selectedList.tasks = newTasks;
+
+    setLists(newLists);
   }
 
   function renderTasksCount() {
@@ -231,7 +304,55 @@ function App() {
     return date;
   }
 
-  const selectedList = lists.find((list) => list.id === selectedListId);
+  // Sets task property of rename to true
+  function renameTask(id) {
+    const newLists = [...lists];
+
+    // close all other rename inputs
+    const selectedList = newLists.find((list) => list.id === selectedListId);
+    const selectedTask = selectedList.tasks.find((task) => task.id === id);
+
+    closeRenameTaskContainers(selectedList);
+    selectedTask.rename = true;
+
+    setLists(newLists);
+  }
+
+  // Sets task property of name to inputted value
+  function applyRenameTask(id, name) {
+    const newLists = [...lists];
+
+    const selectedList = newLists.find((list) => list.id === selectedListId);
+    const selectedTask = selectedList.tasks.find((task) => task.id === id);
+
+    selectedTask.rename = false;
+
+    if (name === "") return;
+    selectedTask.name = name;
+
+    setLists(newLists);
+  }
+
+  // Sets task property of rename to false
+  function cancelRenameTask(id) {
+    const newLists = [...lists];
+
+    const selectedList = newLists.find((list) => list.id === selectedListId);
+    const selectedTask = selectedList.tasks.find((task) => task.id === id);
+
+    selectedTask.rename = false;
+
+    console.log(
+      `cancelRenameList function ran and the selected list rename is ${selectedTask.rename}`
+    );
+
+    setLists(newLists);
+  }
+
+  // Close Rename Container
+  function closeRenameTaskContainers(selectedList) {
+    selectedList.tasks.map((task) => (task.rename = false));
+  }
 
   return (
     <div className="app">
@@ -240,25 +361,27 @@ function App() {
         <div className="date-container">
           <h5 className="date">{renderTodaysDate()}</h5>
         </div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
-        <div className="page-line"></div>
+        <div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+          <div className="page-line"></div>
+        </div>
         <section className={toggleTodoListWindowClass()}>
           <h4 className="lists-header">Todo Lists</h4>
           <input
@@ -282,7 +405,13 @@ function App() {
           </button>
           <div className="count">{renderListsCount()}</div>
           <div className="todo-lists">
-            <TodoList lists={lists} toggleList={toggleList} />
+            <TodoList
+              lists={lists}
+              toggleList={toggleList}
+              renameList={renameList}
+              applyRenameList={applyRenameList}
+              cancelRenameList={cancelRenameList}
+            />
           </div>
         </section>
 
@@ -320,6 +449,9 @@ function App() {
             <TaskList
               tasks={selectedList ? selectedList.tasks : null}
               toggleTask={toggleTask}
+              renameTask={renameTask}
+              applyRenameTask={applyRenameTask}
+              cancelRenameTask={cancelRenameTask}
             />
           </div>
         </section>

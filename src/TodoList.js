@@ -1,9 +1,24 @@
 import React from "react";
 import List from "./List";
 
-function TodoList({ lists, toggleList }) {
+function TodoList({
+  lists,
+  toggleList,
+  renameList,
+  applyRenameList,
+  cancelRenameList,
+}) {
   return lists.map((list) => {
-    return <List key={list.id} toggleList={toggleList} list={list} />;
+    return (
+      <List
+        key={list.id}
+        toggleList={toggleList}
+        renameList={renameList}
+        applyRenameList={applyRenameList}
+        cancelRenameList={cancelRenameList}
+        list={list}
+      />
+    );
   });
 }
 

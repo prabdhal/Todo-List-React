@@ -48,6 +48,7 @@ input[type="text"] {
   --smallFont: 1.2rem;
   --regularFont: 1rem;
   --smallerFont: 0.8rem;
+  --btnSmallPadding: 2px;
   --btnPadding: 5px;
   --smallverticalSpacing: 10px 0;
   --mediumverticalSpacing: 20px 0;
@@ -71,6 +72,11 @@ main {
   border-left: 2px solid red;
 }
 
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
 .date-container {
   margin-right: 10px;
 }
@@ -92,10 +98,6 @@ main {
   border-width: thin;
 }
 
-.hide {
-  display: none;
-}
-
 .btn-container {
   display: flex;
   flex-direction: row;
@@ -105,6 +107,14 @@ main {
 .btn {
   height: 30px;
   padding: var(--btnPadding);
+  margin: 3px;
+  border-radius: 3px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.small-btn {
+  padding: var(--btnSmallPadding);
   margin: 3px;
   border-radius: 3px;
   border: 1px solid black;
@@ -152,6 +162,10 @@ footer {
 @import "Navbar";
 @import "List";
 @import "Task";
+
+.hide {
+  display: none;
+}
 
 @media screen and (max-width: 1550px) {
   .todo-lists-container {

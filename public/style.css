@@ -52,6 +52,7 @@ input[type="text"] {
   --smallFont: 1.2rem;
   --regularFont: 1rem;
   --smallerFont: 0.8rem;
+  --btnSmallPadding: 2px;
   --btnPadding: 5px;
   --smallverticalSpacing: 10px 0;
   --mediumverticalSpacing: 20px 0;
@@ -73,6 +74,16 @@ main {
   padding: 30px 0;
   border-right: 2px solid red;
   border-left: 2px solid red;
+}
+
+.row {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
 }
 
 .date-container {
@@ -102,10 +113,6 @@ main {
   border-width: thin;
 }
 
-.hide {
-  display: none;
-}
-
 .btn-container {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -122,6 +129,14 @@ main {
 .btn {
   height: 30px;
   padding: var(--btnPadding);
+  margin: 3px;
+  border-radius: 3px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+.small-btn {
+  padding: var(--btnSmallPadding);
   margin: 3px;
   border-radius: 3px;
   border: 1px solid black;
@@ -201,6 +216,13 @@ nav {
   right: 90%;
 }
 
+.lists-header {
+  font-size: var(--largeFont);
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
 .todo-lists {
   max-height: 250px;
   overflow-y: auto;
@@ -208,7 +230,32 @@ nav {
 }
 
 .list {
+  width: 310px;
   margin: 3px 0;
+  background-color: var(--lightYellow);
+}
+
+.rename-container {
+  min-width: 350px;
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.rename-input {
+  width: 260px;
+  padding: 2px;
+  border: 0;
+  outline: 0;
+  border-bottom: 2px solid var(--pink);
   background-color: var(--lightYellow);
 }
 
@@ -247,13 +294,6 @@ nav {
   right: -100%;
 }
 
-.lists-header {
-  font-size: var(--largeFont);
-  text-align: center;
-  margin-bottom: 20px;
-  font-weight: bold;
-}
-
 .tasks-header {
   color: white;
   font-size: var(--largeFont);
@@ -287,6 +327,7 @@ nav {
 }
 
 .task {
+  width: 310px;
   margin: 3px 0;
   margin-left: 10px;
   background-color: var(--lightPink);
@@ -304,6 +345,10 @@ nav {
 .task:hover {
   -webkit-text-decoration: line-through black;
           text-decoration: line-through black;
+}
+
+.hide {
+  display: none;
 }
 
 @media screen and (max-width: 1550px) {
