@@ -1,9 +1,38 @@
-.lists {
-  padding: 20px 0;
+.todo-lists-container {
+  min-width: 400px;
+  position: absolute;
+  padding: 20px;
+  margin: auto;
+  transform: translate(50%, -30%);
+  top: 30%;
+  right: 50%;
+  background-color: var(--yellow);
+  border: 2px dashed var(--pink);
+  transition: all 500ms ease-in-out;
+  transition-delay: 150ms;
+}
+
+.shift-todo-lists {
+  transform: translate(70%, -25%);
+  top: 25%;
+  right: 90%;
+}
+
+.todo-lists {
+  max-height: 250px;
+  overflow-y: auto;
+  margin: 10px 0;
+}
+
+.list {
+  margin: 3px 0;
+  background-color: var(--lightYellow);
 }
 
 .list-name {
   margin-left: 10px;
+  font-size: var(--smallFont);
+  font-weight: bold;
   cursor: pointer;
 }
 
@@ -12,5 +41,5 @@
 }
 
 .list-selected {
-  opacity: 0.5;
+  color: var(--pink);
 }

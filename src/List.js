@@ -12,8 +12,8 @@ function List({ list, toggleList }) {
   }
 
   return (
-    <div>
-      <label className="list">
+    <div className="list">
+      <label>
         <span onClick={handleListClick} className={toggleListSelectedClass()}>
           {list.name}
         </span>

@@ -12,8 +12,8 @@ function Task({ task, toggleTask }) {
   }
 
   return (
-    <div>
-      <label className="task">
+    <div className="task">
+      <label>
         <input
           className="task-checkbox"
           type="checkbox"
