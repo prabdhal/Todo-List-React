@@ -90,6 +90,12 @@ function App() {
   }
 
   //-------------------- LIST FUNCTIONS --------------------//
+  // OnKeyDown Function
+  function listKeyPress(e) {
+    if (e.keyCode == 13) {
+      handleAddList(e);
+    }
+  }
 
   // Initializes a list item
   function handleAddList(e) {
@@ -115,10 +121,11 @@ function App() {
     const selectedList = lists.find((list) => list.id === id);
     const newLists = [...lists];
 
-    closeRenameListContainers(newLists);
     // otherList creation is important to ensure selected
     // list works without reseting its selected property
     selectedList.selected = !selectedList.selected;
+    closeRenameListContainers(newLists);
+    closeRenameTaskContainers(selectedList);
     const otherLists = newLists.filter((list) => list.id !== id);
 
     otherLists.map((list) => {
@@ -133,6 +140,10 @@ function App() {
     const newLists = [...lists];
 
     closeRenameListContainers(newLists);
+    // close all tasks for each list
+    newLists.map((list) => {
+      return list.tasks.map((task) => (task.rename = false));
+    });
 
     newLists.map((list) => {
       return (list.selected = false);
@@ -152,9 +163,11 @@ function App() {
 
   // Deletes selected list
   function handleDeleteLists() {
+    const newLists = [...lists];
+
     closeRenameListContainers(newLists);
-    const newLists = lists.filter((list) => !list.selected);
-    setLists(newLists);
+    const remainingLists = lists.filter((list) => !list.selected);
+    setLists(remainingLists);
     setSelectedListId(null);
   }
 
@@ -170,8 +183,9 @@ function App() {
   function renameList(id) {
     const newLists = [...lists];
 
-    closeRenameListContainers(newLists);
     const selectedList = lists.find((list) => list.id === id);
+    closeRenameListContainers(newLists);
+    closeRenameTaskContainers(selectedList);
     selectedList.rename = true;
 
     setLists(newLists);
@@ -209,6 +223,13 @@ function App() {
 
   //-------------------- TASK FUNCTIONS --------------------//
 
+  //OnKeyDown Function
+  function taskKeyPress(e) {
+    if (e.keyCode == 13) {
+      handleAddTask(e);
+    }
+  }
+
   // Initializes a task item
   function handleAddTask(e) {
     const newLists = [...lists];
@@ -216,6 +237,7 @@ function App() {
     const name = taskNameRef.current.value;
     if (name === "") return;
     const selectedList = newLists.find((list) => list.id === selectedListId);
+    closeRenameListContainers(newLists);
     closeRenameTaskContainers(selectedList);
     selectedList.tasks.push({
       id: uuidv4(),
@@ -233,6 +255,7 @@ function App() {
     const newLists = [...lists];
 
     const selectedList = newLists.find((list) => list.id === selectedListId);
+    closeRenameListContainers(newLists);
     closeRenameTaskContainers(selectedList);
 
     const selectedTask = selectedList.tasks.find((task) => task.id === id);
@@ -254,6 +277,7 @@ function App() {
     const newLists = [...lists];
 
     const selectedList = lists.find((list) => list.id === selectedListId);
+    closeRenameListContainers(newLists);
     closeRenameTaskContainers(selectedList);
 
     const newTasks = selectedList.tasks.filter((task) => !task.complete);
@@ -273,37 +297,6 @@ function App() {
     else return `${count} tasks left to complete`;
   }
 
-  function renderTodaysDate() {
-    let today = new Date();
-
-    let dd = today.getDate();
-    let mm = today.getMonth();
-    let yyyy = today.getFullYear();
-
-    let months = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-
-    if (dd < 10) {
-      dd = "0" + dd;
-    }
-
-    let date = `${months[mm]}. ${dd}, ${yyyy}`;
-
-    return date;
-  }
-
   // Sets task property of rename to true
   function renameTask(id) {
     const newLists = [...lists];
@@ -312,6 +305,7 @@ function App() {
     const selectedList = newLists.find((list) => list.id === selectedListId);
     const selectedTask = selectedList.tasks.find((task) => task.id === id);
 
+    closeRenameListContainers(newLists);
     closeRenameTaskContainers(selectedList);
     selectedTask.rename = true;
 
@@ -354,6 +348,37 @@ function App() {
     selectedList.tasks.map((task) => (task.rename = false));
   }
 
+  function renderTodaysDate() {
+    let today = new Date();
+
+    let dd = today.getDate();
+    let mm = today.getMonth();
+    let yyyy = today.getFullYear();
+
+    let months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+
+    if (dd < 10) {
+      dd = "0" + dd;
+    }
+
+    let date = `${months[mm]}. ${dd}, ${yyyy}`;
+
+    return date;
+  }
+
   return (
     <div className="app">
       <Navbar />
@@ -389,6 +414,7 @@ function App() {
             ref={listNameRef}
             type="text"
             placeholder="Enter a todo list..."
+            onKeyDown={listKeyPress}
           />
           <button
             className="btn btn-success"
@@ -433,6 +459,7 @@ function App() {
             ref={taskNameRef}
             type="text"
             placeholder="Enter a task..."
+            onKeyDown={taskKeyPress}
           />
           <button
             className="btn btn-success"
