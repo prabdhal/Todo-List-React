@@ -5,6 +5,7 @@ function TodoList({
   lists,
   toggleList,
   renameList,
+  getListRenameDefaultValue,
   applyRenameList,
   cancelRenameList,
 }) {
@@ -14,6 +15,7 @@ function TodoList({
         key={list.id}
         toggleList={toggleList}
         renameList={renameList}
+        getListRenameDefaultValue={getListRenameDefaultValue}
         applyRenameList={applyRenameList}
         cancelRenameList={cancelRenameList}
         list={list}

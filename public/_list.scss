@@ -28,6 +28,7 @@
 .todo-lists {
   max-height: 250px;
   overflow-y: auto;
+  overflow-x: hidden;
   margin: 10px 0;
 }
 
@@ -38,14 +39,13 @@
 }
 
 .rename-container {
-  min-width: 350px;
-  position: absolute;
+  min-width: 370px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.rename-input {
+.list-rename-input {
   width: 260px;
   padding: 2px;
   border: 0;

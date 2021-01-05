@@ -92,9 +92,17 @@ function App() {
   //-------------------- LIST FUNCTIONS --------------------//
   // OnKeyDown Function
   function listKeyPress(e) {
-    if (e.keyCode == 13) {
+    if (e.keyCode === 13) {
       handleAddList(e);
     }
+  }
+
+  function getListRenameDefaultValue(id) {
+    const newLists = [...lists];
+
+    const selectedList = newLists.find((list) => list.id === id);
+
+    return selectedList.name;
   }
 
   // Initializes a list item
@@ -223,9 +231,18 @@ function App() {
 
   //-------------------- TASK FUNCTIONS --------------------//
 
+  function getTaskRenameDefaultValue(id) {
+    const newLists = [...lists];
+
+    const selectedList = newLists.find((list) => list.id === selectedListId);
+    const selectedTask = selectedList.tasks.find((task) => task.id);
+
+    return selectedTask.name;
+  }
+
   //OnKeyDown Function
   function taskKeyPress(e) {
-    if (e.keyCode == 13) {
+    if (e.keyCode === 13) {
       handleAddTask(e);
     }
   }
@@ -435,6 +452,7 @@ function App() {
               lists={lists}
               toggleList={toggleList}
               renameList={renameList}
+              getListRenameDefaultValue={getListRenameDefaultValue}
               applyRenameList={applyRenameList}
               cancelRenameList={cancelRenameList}
             />
@@ -477,6 +495,7 @@ function App() {
               tasks={selectedList ? selectedList.tasks : null}
               toggleTask={toggleTask}
               renameTask={renameTask}
+              getTaskRenameDefaultValue={getTaskRenameDefaultValue}
               applyRenameTask={applyRenameTask}
               cancelRenameTask={cancelRenameTask}
             />

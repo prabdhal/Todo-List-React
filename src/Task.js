@@ -4,10 +4,17 @@ function Task({
   task,
   toggleTask,
   renameTask,
+  getTaskRenameDefaultValue,
   applyRenameTask,
   cancelRenameTask,
 }) {
-  const taskNameRef = useRef();
+  const renameNameRef = useRef();
+
+  function listKeyPress(e) {
+    if (e.keyCode === 13) {
+      handleChangeBtnClick();
+    }
+  }
 
   function handleTaskClick() {
     toggleTask(task.id);
@@ -18,7 +25,7 @@ function Task({
   }
 
   function handleChangeBtnClick() {
-    const name = taskNameRef.current.value;
+    const name = renameNameRef.current.value;
     applyRenameTask(task.id, name);
   }
 
@@ -30,25 +37,44 @@ function Task({
   function toggleRenameContainerClass() {
     let classes = "rename-container ";
     if (!task.rename) return (classes += "hide");
-    return (classes = "rename-container");
+    return classes;
+  }
+
+  function toggleTaskContainerClass() {
+    let classes = "";
+    if (task.rename) return (classes += "hide");
+    return classes;
   }
 
   function toggleRenameBtnClass() {
     let classes = "small-btn btn-primary ";
     if (task.rename) return (classes += "hide");
-    return (classes = "small-btn btn-primary");
+    return classes;
   }
+
   function toggleTaskCompletedClass() {
     let classes = "task-name ";
     if (task.complete) return (classes += "task-completed");
-    return (classes = "task-name");
+    return classes;
+  }
+
+  function handleRenameDefaultValue() {
+    console.log(getTaskRenameDefaultValue(task.id));
+
+    return getTaskRenameDefaultValue(task.id);
   }
 
   return (
     <div className="row">
       <div className="task">
         <span className={toggleRenameContainerClass()}>
-          <input className="rename-input" ref={taskNameRef} type="text" />
+          <input
+            className="task-rename-input"
+            onKeyDown={listKeyPress}
+            ref={renameNameRef}
+            defaultValue={handleRenameDefaultValue()}
+            type="text"
+          />
           <span className="rename-btns">
             <button
               className="small-btn btn-success"
@@ -64,7 +90,7 @@ function Task({
             </button>
           </span>
         </span>
-        <label>
+        <label className={toggleTaskContainerClass()}>
           <input
             className="task-checkbox"
             type="checkbox"

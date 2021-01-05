@@ -7,8 +7,8 @@ function TaskList({
   renameTask,
   applyRenameTask,
   cancelRenameTask,
+  getTaskRenameDefaultValue,
 }) {
-  console.log(tasks);
   if (tasks === undefined || tasks === null) return null;
   return tasks.map((task) => {
     return (
@@ -16,6 +16,7 @@ function TaskList({
         key={task.id}
         toggleTask={toggleTask}
         renameTask={renameTask}
+        getTaskRenameDefaultValue={getTaskRenameDefaultValue}
         applyRenameTask={applyRenameTask}
         cancelRenameTask={cancelRenameTask}
         task={task}

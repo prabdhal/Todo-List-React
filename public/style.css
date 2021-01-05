@@ -226,6 +226,7 @@ nav {
 .todo-lists {
   max-height: 250px;
   overflow-y: auto;
+  overflow-x: hidden;
   margin: 10px 0;
 }
 
@@ -236,8 +237,7 @@ nav {
 }
 
 .rename-container {
-  min-width: 350px;
-  position: absolute;
+  min-width: 370px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -250,7 +250,7 @@ nav {
           justify-content: space-between;
 }
 
-.rename-input {
+.list-rename-input {
   width: 260px;
   padding: 2px;
   border: 0;
@@ -305,6 +305,7 @@ nav {
 .task-list {
   max-height: 250px;
   overflow-y: auto;
+  overflow-x: hidden;
   margin: 10px 0;
 }
 
@@ -334,6 +335,15 @@ nav {
   border: 1px solid var(--lightPink);
 }
 
+.task-rename-input {
+  width: 260px;
+  padding: 2px;
+  border: 0;
+  outline: 0;
+  border-bottom: 2px solid var(--lightBlue);
+  background-color: var(--lightPink);
+}
+
 .task-name {
   margin-left: 10px;
   color: white;
@@ -342,7 +352,7 @@ nav {
 }
 
 .task-completed,
-.task:hover {
+label:hover {
   -webkit-text-decoration: line-through black;
           text-decoration: line-through black;
 }
