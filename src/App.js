@@ -235,8 +235,9 @@ function App() {
     const newLists = [...lists];
 
     const selectedList = newLists.find((list) => list.id === selectedListId);
-    const selectedTask = selectedList.tasks.find((task) => task.id);
+    const selectedTask = selectedList.tasks.find((task) => task.id === id);
 
+    console.log(selectedTask.name);
     return selectedTask.name;
   }
 
@@ -452,9 +453,9 @@ function App() {
               lists={lists}
               toggleList={toggleList}
               renameList={renameList}
-              getListRenameDefaultValue={getListRenameDefaultValue}
               applyRenameList={applyRenameList}
               cancelRenameList={cancelRenameList}
+              getListRenameDefaultValue={getListRenameDefaultValue}
             />
           </div>
         </section>
@@ -495,9 +496,9 @@ function App() {
               tasks={selectedList ? selectedList.tasks : null}
               toggleTask={toggleTask}
               renameTask={renameTask}
-              getTaskRenameDefaultValue={getTaskRenameDefaultValue}
               applyRenameTask={applyRenameTask}
               cancelRenameTask={cancelRenameTask}
+              getTaskRenameDefaultValue={getTaskRenameDefaultValue}
             />
           </div>
         </section>

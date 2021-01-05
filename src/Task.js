@@ -4,9 +4,9 @@ function Task({
   task,
   toggleTask,
   renameTask,
-  getTaskRenameDefaultValue,
   applyRenameTask,
   cancelRenameTask,
+  getTaskRenameDefaultValue,
 }) {
   const renameNameRef = useRef();
 
@@ -41,7 +41,7 @@ function Task({
   }
 
   function toggleTaskContainerClass() {
-    let classes = "";
+    let classes = "task-label ";
     if (task.rename) return (classes += "hide");
     return classes;
   }

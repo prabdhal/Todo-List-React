@@ -4,9 +4,9 @@ function List({
   list,
   toggleList,
   renameList,
-  getListRenameDefaultValue,
   applyRenameList,
   cancelRenameList,
+  getListRenameDefaultValue,
 }) {
   const renameNameRef = useRef();
 
@@ -41,9 +41,9 @@ function List({
     return classes;
   }
 
+  let classes = "";
+  if (list.rename) return (classes += "hide");
   function toggleListContainerClass() {
-    let classes = "";
-    if (list.rename) return (classes += "hide");
     return classes;
   }
 
@@ -61,8 +61,6 @@ function List({
   }
 
   function handleRenameDefaultValue() {
-    console.log(getListRenameDefaultValue(list.id));
-
     return getListRenameDefaultValue(list.id);
   }
 

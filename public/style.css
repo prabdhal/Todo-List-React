@@ -352,7 +352,7 @@ nav {
 }
 
 .task-completed,
-label:hover {
+.task-label:hover {
   -webkit-text-decoration: line-through black;
           text-decoration: line-through black;
 }

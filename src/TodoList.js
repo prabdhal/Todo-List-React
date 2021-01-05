@@ -5,9 +5,9 @@ function TodoList({
   lists,
   toggleList,
   renameList,
-  getListRenameDefaultValue,
   applyRenameList,
   cancelRenameList,
+  getListRenameDefaultValue,
 }) {
   return lists.map((list) => {
     return (
